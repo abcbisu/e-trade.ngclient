@@ -1,0 +1,23 @@
+<!-- <div class="i-checks">
+  <label [attr.for]="Id">
+    <div class="iradio_square-green" [ngClass]="{ hover: Hovered, checked: Checked, disabled: Disabled }" style="position: relative;">
+      <input type="radio" (mouseenter)="onMouseEntered($event); $event.stopPropagation()" (mouseleave)="onMouseLeaved($event); $event.stopPropagation()"
+        (change)="onChanged($event)" [checked]="Checked" [disabled]="Disabled" style="position: absolute; opacity: 0;"
+        [attr.id]="Id" [attr.name]="Name" [attr.value]="Value" />
+      <i></i>
+    </div>
+    <ng-content></ng-content>
+  </label>
+</div> -->
+
+<div class="i-checks">
+  <label [attr.for]="Id">
+    <div class="iradio_square-green" [ngClass]="{ hover: Hovered, checked: Checked, disabled: Disabled }" style="position: relative;">
+      <input type="radio" (mouseenter)="onMouseEntered($event); $event.stopPropagation()" (mouseleave)="onMouseLeaved($event); $event.stopPropagation()"
+        (change)="onChanged($event)" style="position: absolute; opacity: 0;"
+        [attr.id]="Id" [attr.name]="Name" [attr.value]="Value" [checked]="Checked" [disabled]="Disabled"/>
+      <i></i>
+    </div>
+    <ng-content></ng-content>
+  </label>
+</div>

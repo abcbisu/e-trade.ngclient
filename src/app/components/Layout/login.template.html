@@ -1,0 +1,40 @@
+<h1 class="text-center">Login to start your session</h1>
+<div class="loginColumns animated fadeInDown" style="padding: 25px;">
+  <div class="row">
+    <div class="col-md-offset-3 col-md-6">
+      <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px'}"></ngx-loading>
+      <div class="ibox-content">
+        <form class="m-t" [formGroup]="loginForm" (ngSubmit)="onSubmit()" role="form" autocomplete="off">
+          <div class="form-group">
+            <input type="text" formControlName="userId" class="form-control" placeholder="Username">
+          </div>
+          <div class="form-group">
+            <input type="password" formControlName="password" class="form-control" placeholder="Password">
+          </div>
+          <div class="checkbox">
+            <label><input type="checkbox">Remember me?</label>
+          </div>
+          <button type="submit" [disabled]="!loginForm.valid" class="btn btn-primary block full-width m-b">Login
+          </button>
+          <a class="block" routerLink="/forgot-password">Forgot password?</a>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-offset-3 col-md-6">
+      <div class="ibox">
+        <div class="ibox-content">
+          <ul class="list-unstyled file-list">
+            <li><a routerLink="/signup" style="font-size:medium"><i class="fa fa-file"></i> Create New Account</a></li>
+            <li><a routerLink="/forgot-password" style="font-size:medium"><i class="fa fa-file-picture-o"></i> Password
+                Recovery</a></li>
+            <li><a routerLink="" style="font-size:medium"><i class="fa fa-stack-exchange"></i> Lisence Verification</a></li>
+            <li><a routerLink="" style="font-size:medium"><i class="fa fa-file"></i> User Manual</a></li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

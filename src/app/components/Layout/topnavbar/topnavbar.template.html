@@ -1,0 +1,16 @@
+<div class="row border-bottom">
+  <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+    <div *ngIf="IsAuthenticated===true" class="navbar-header">
+      <a class="minimalize-styl-2 btn btn-primary " (click)="toggleNavigation()"><i class="fa fa-bars"></i> </a>
+    </div>
+    <ul class="nav navbar-top-links navbar-right">
+      <li>
+  <select class="form-control m-b minimalize-styl-2" name="account">
+          <option>English</option>
+          <option>Bengali</option>
+        </select>
+      </li>
+    </ul>
+
+  </nav>
+</div>

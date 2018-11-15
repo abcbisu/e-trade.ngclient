@@ -1,0 +1,116 @@
+//test
+<div class="middle-box text-center loginscreen   animated fadeInDown" style="width:100%">
+    <div>
+        <div class="alert alert-danger" *ngIf="checkStatus==true">
+            Please fill all required field
+        </div>
+        <form [formGroup]="Registration" (ngSubmit)="registerUser()">
+            <h3>Register to IN+</h3>
+            <p>Create account to see it in action.</p>
+            <div class="form-group ">
+                <div class="row">
+                    <div class="col-md-4" style="text-align: left;">
+                        Registration Type<span style="color:red">*</span>
+                    </div>
+                    <div class="col-md-8" style="text-align: left;">
+                        <input type="radio" name="regtype" value="personal" checked> Personal
+                        <input type="radio" name="regtype" value="institution"> Institution
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" formArrayName="fullNames">
+                <div *ngFor="let language of languages; let i=index">
+                    <div class="row" [formGroupName]="i">
+                        <div class="col-md-4" style="text-align: left;">
+                            {{getLocalText("L001","label",selectedLangugeId,language.id)}} <span style="color:red">*</span>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" #t class="form-control xyz" formControlName="fullName" placeholder="{{localizedSource['L001'].placeholder[selectedLangugeId][language.id]}}">
+                            <div class="alert-danger" *ngIf="isValidFullName(language.id)">Full Name is required </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-4" style="text-align: left;">
+                        Mobile number <span style="color:red">*</span>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" formControlName="mobileNo" placeholder="Mobile number">
+                        <div class="alert-danger" *ngIf="mobileNo.touched && mobileNo.invalid && !mobileNo.errors?.minlength && !mobileNo.errors?.maxlength && !mobileNo.errors?.pattern">Mobile
+                            number is required </div>
+                        <div class="alert-danger" *ngIf="mobileNo.errors?.minlength">Enter 10 digit Mobile number </div>
+                        <div class="alert-danger" *ngIf="mobileNo.errors?.maxlength">Enter 10 digit Mobile number </div>
+                        <div class="alert-danger" *ngIf="mobileNo.errors?.pattern">Enter only numbers </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-4" style="text-align: left;">
+                        E-mail
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" formControlName="email" placeholder="E-mail">
+                        <div class="alert-danger" *ngIf="email.invalid">Enter valid email</div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-4" style="text-align: left;">
+                        Document Type <span style="color:red">*</span>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-control" formControlName="documentTypeDropDwn" (change)="docDrpChngEvnt($event)">
+                            <option value="">--Select--</option>
+                            <option value="1">NID</option>
+                            <option value="2">Passport</option>
+                            <option value="3">Birth Registration</option>
+                        </select>
+                    </div>
+                    <div class="col-md-5">
+                        <input type="text" class="form-control" formControlName="documentNo" placeholder="Document No">
+                        <div class="alert-danger" *ngIf="(documentNo.touched && documentNo.invalid) || (documentNo.untouched && docTypeVal>0 && documentNo.invalid)">Document
+                            No is required</div>
+                        <div class="alert-danger" *ngIf="docTypeVal==''">Document Type is required</div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-4" style="text-align: left;">
+                        Password <span style="color:red">*</span>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="password" class="form-control" formControlName="password" placeholder="Password">
+                        <div class="alert-danger" *ngIf="password.touched && password.invalid && !password.errors?.minlength">Password
+                            is required</div>
+                        <div class="alert-danger" *ngIf="password.errors?.minlength">Password should contain atleast 5
+                            characters</div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-4" style="text-align: left;">
+                        Confirm Password
+                    </div>
+                    <div class="col-md-8">
+                        <input type="password" class="form-control" (keyup)="checkPassword()" formControlName="confirmPassword"
+                            placeholder="Confirm Password">
+                        <div class="alert-danger" *ngIf="passMatcher==false">Password mismatch</div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="checkbox i-checks"><label> <input type="checkbox"><i></i> Agree the terms and policy
+                    </label></div>
+            </div>
+            <button type="submit" class="btn btn-primary block full-width m-b">Register</button>
+            <a class="btn btn-sm btn-white btn-block" routerLink="/login">Login</a>
+        </form>
+
+    </div>
+</div>

@@ -1,0 +1,4 @@
+Fold All=>          ctrl + K + 0
+Unfold All=>        ctrl + k + j
+cmd platte=>        ctrl + shift +p
+short cuts=>        ctrl + K + s
