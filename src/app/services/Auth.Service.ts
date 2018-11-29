@@ -1,44 +1,52 @@
-import { Core } from 'app/Handlers/Core';
-import { LoginData } from "./../Models/LoginData";
+import { Core } from "app/Handlers/Core";
+import { UserToken, RspLogin } from "./../Models/LoginData";
 import { DataService } from "./data.service";
-import {
-  NotSupportedException,
-  NullReferenceException,
-  LoginRequiredException
-} from "./../Exceptions/AppException";
 import { Injectable } from "@angular/core";
-import { Http } from "@angular/http";
-import { serviceErrorHandler } from "../Handlers/serviceErrorHandler";
+import { ServiceErrorHandler } from "../Handlers/serviceErrorHandler";
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
 
 @Injectable({
   providedIn: "root"
 })
-export class AuthService extends DataService {
-  private _http: Http;
-  private _srvErrHndlr: serviceErrorHandler;
-  constructor(http: Http,private core: Core,srvErrHndlr: serviceErrorHandler) {
-    super(http, srvErrHndlr);
-    this._http = http;
-    this._srvErrHndlr = srvErrHndlr;
-  }
+export class AuthService {
+  constructor(
+    private http: HttpClient,
+    private core: Core,
+    private srvErrHndlr: ServiceErrorHandler,
+    private dataSrv: DataService
+  ) {}
 
-  public login(userId: string, password: string) {
-    return this._http
-      .post(this.buildUrl( "citizens/login"), { UserId: userId, Password: password })
-      .map(t => {
-        this.core.setLoginData(t.json() as LoginData);
-        return t.json();
+  public tryTologin(
+    identity: string,
+    password: string,
+    idType: number
+  ): Observable<RspLogin> {
+    return this.http
+      .post<RspLogin>(this.dataSrv.buildUrl("api/v1/users/login"), {
+        Idntity: identity,
+        Password: password,
+        IdType: idType
       })
-      .catch(this._srvErrHndlr.handleError);
+      .catch(this.srvErrHndlr.handleError);
+  }
+  public LoginWithOtp(
+    otp: string,
+    identiy: string,
+    idType: number
+  ): Observable<UserToken> {
+    return this.http
+      .post<UserToken>(this.dataSrv.buildUrl("api/v1/users/LoginWithOtp"), {
+        Idntity: identiy,
+        Otp: otp,
+        IdType: idType
+      })
+      .catch(this.srvErrHndlr.handleError);
   }
 
   public logOut() {
-    return this._http
-      .get(this.buildUrl( "citizens/logout"))
-      .map(t => {
-        this.core.removeLoginData();
-        return t.json();
-      })
-      .catch(this._srvErrHndlr.handleError);
+    return this.http
+      .get(this.dataSrv.buildUrl("api/v1/users/logout"))
+      .catch(this.srvErrHndlr.handleError);
   }
 }

@@ -1,31 +1,36 @@
-import { Component } from '@angular/core';
-import {Router} from '@angular/router';
-import 'jquery-slimscroll';
+import { Core } from "./../../../Handlers/Core";
+import { AuthService } from "./../../../services/Auth.Service";
+import { Component } from "@angular/core";
+import {Router} from "@angular/router";
+import "jquery-slimscroll";
 
 declare var jQuery:any;
 
 @Component({
-  selector: 'navigation',
-  templateUrl: 'navigation.template.html'
+  selector: "navigation",
+  templateUrl: "navigation.template.html"
 })
-
 export class NavigationComponent {
+  constructor(private router: Router,private auth:AuthService,private core:Core) {}
 
-  constructor(private router: Router) {}
-
+  public onLogout():void{
+    this.auth.logOut().subscribe(t=>{
+      this.core.removeLoginData();
+    });
+  }
+  //#region system code
   ngAfterViewInit() {
-    jQuery('#side-menu').metisMenu();
+    jQuery("#side-menu").metisMenu();
 
-    if (jQuery("body").hasClass('fixed-sidebar')) {
-      jQuery('.sidebar-collapse').slimscroll({
-        height: '100%'
-      })
+    if (jQuery("body").hasClass("fixed-sidebar")) {
+      jQuery(".sidebar-collapse").slimscroll({
+        height: "100%"
+      });
     }
   }
 
-  activeRoute(routename: string): boolean{
+  activeRoute(routename: string): boolean {
     return this.router.url.indexOf(routename) > -1;
   }
-
-
+  //#endregion
 }

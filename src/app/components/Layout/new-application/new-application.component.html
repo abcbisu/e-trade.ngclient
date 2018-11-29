@@ -1,0 +1,333 @@
+<div class="middle1-box text-center animated fadeInDown ScrollStyle" style="width:100%;">
+  <div>
+    <div class="alert alert-danger" *ngIf="checkStatus==true">
+      Please fill all required field
+    </div>
+    <form [formGroup]="NewApplication" (ngSubmit)="newapplication()" *ngIf="activeForm==='details'">
+      <h3>Apply For New Trade License</h3><br />
+      <div class="form-group">
+        <div class="row">
+          <div class="col-md-4" style="text-align: left;">
+            Issuing Authority <span style="color:red">*</span>
+          </div>
+          <div class="col-md-8">
+            <select class="form-control" formControlName="issuingAuthority" (change)="docDrpChngEvnt($event)">
+              <option value="">--Select--</option>
+              <option value="1">Kumilla City Corporation</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" formArrayName="tradeNames">
+        <div *ngFor="let language of languages; let i=index">
+          <div class="row" [formGroupName]="i">
+            <div class="col-md-4" style="text-align: left;">
+              {{getLocalText("L001","label",selectedLangugeId,language.id)}} <span style="color:red">*</span>
+            </div>
+            <div class="col-md-8">
+              <input type="text" #t class="form-control xyz m-b" formControlName="tradeName" placeholder="{{localizedSource['L001'].placeholder[selectedLangugeId][language.id]}}">
+              <div class="alert-danger" *ngIf="isValidTradeName(language.id)">Trade Name is required </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-md-4" style="text-align: left;">
+            Business Description <span style="color:red">*</span>
+          </div>
+          <div class="col-md-8">
+            <textarea rows="2" class="form-control" formControlName="businessDescription" placeholder="Business Description">
+                    </textarea>
+            <!-- <input type="text-area" class="form-control" formControlName="businessDescription" placeholder="Business Description"> -->
+            <div class="alert-danger" *ngIf="businessDescription.invalid && businessDescription.touched">Business
+              Description is required</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" formArrayName="holdingNos">
+        <div *ngFor="let language of languages; let i=index">
+          <div class="row" [formGroupName]="i">
+            <div class="col-md-4" style="text-align: left;">
+              {{getLocalTextForHoldingNo("L002","label",selectedLangugeId,language.id)}} <span style="color:red">*</span>
+            </div>
+            <div class="col-md-8">
+              <input type="text" #h class="form-control xyz m-b" formControlName="holdingNo" placeholder="{{localizedSource['L002'].placeholder[selectedLangugeId][language.id]}}">
+              <div class="alert-danger" *ngIf="isValidHoldingNo(language.id)">Holding No is required </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" formArrayName="addresses">
+        <div *ngFor="let language of languages; let i=index">
+          <div class="row" [formGroupName]="i">
+            <div class="col-md-4" style="text-align: left;">
+              {{getLocalTextForAddress("L003","label",selectedLangugeId,language.id)}} <span style="color:red">*</span>
+            </div>
+            <div class="col-md-8">
+              <textarea rows="2" #a class="form-control xyz m-b" formControlName="address" placeholder="{{localizedSource['L003'].placeholder[selectedLangugeId][language.id]}}">
+                          </textarea>
+              <div class="alert-danger" *ngIf="isValidAddress(language.id)">Address is required </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group" formArrayName="roads">
+        <div *ngFor="let language of languages; let i=index">
+          <div class="row" [formGroupName]="i">
+            <div class="col-md-4" style="text-align: left;">
+              {{getLocalTextForRoad("L004","label",selectedLangugeId,language.id)}} <span style="color:red">*</span>
+            </div>
+            <div class="col-md-8">
+              <textarea rows="2" #r class="form-control xyz m-b" formControlName="road" placeholder="{{localizedSource['L004'].placeholder[selectedLangugeId][language.id]}}">
+                          </textarea>
+              <div class="alert-danger" *ngIf="isValidRoad(language.id)">Road is required </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-md-4" style="text-align: left;">
+            Business Region <span style="color:red">*</span>
+          </div>
+          <div class="col-md-8">
+            <select class="form-control" formControlName="businessRegion" (change)="businessRegnChng($event)">
+              <option value="">--Select--</option>
+              <option value="1">Region 1</option>
+              <option value="1">Region 2</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-md-4" style="text-align: left;">
+            Business Ward <span style="color:red">*</span>
+          </div>
+          <div class="col-md-8">
+            <select class="form-control" formControlName="businessWard" (change)="businessWardChng($event)">
+              <option value="">--Select--</option>
+              <option value="1">Ward 1</option>
+              <option value="1">Ward 2</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-md-4" style="text-align: left;">
+            Business Location <span style="color:red">*</span>
+          </div>
+          <div class="col-md-8">
+            <select class="form-control" formControlName="businessLocation" (change)="businessLocationChng($event)">
+              <option value="">--Select--</option>
+              <option value="1">Location 1</option>
+              <option value="1">Location 2</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-md-4" style="text-align: left;">
+            Market Name
+          </div>
+          <div class="col-md-8">
+            <select class="form-control" formControlName="marketName" (change)="marketNameChng($event)">
+              <option value="">--Select--</option>
+              <option value="1">Market 1</option>
+              <option value="1">Market 2</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-md-4" style="text-align: left;">
+            Floor No
+          </div>
+          <div class="col-md-8">
+            <input type="text" class="form-control" formControlName="floorNo" placeholder="Floor No">
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-md-4" style="text-align: left;">
+            Shop No
+          </div>
+          <div class="col-md-8">
+            <input type="text" class="form-control" formControlName="shopNo" placeholder="Shop No">
+          </div>
+        </div>
+      </div>
+      <!-- <div class="form-group">
+            <div class="row">
+                <div class="col-md-4" style="text-align: left;">
+                    Business Start Date 
+                </div>
+                <my-date-picker name="businessStartDt" [options]="myDatePickerOptions"
+                            formControlName="businessStartDt"></my-date-picker>
+            </div>
+        </div> -->
+      <!-- <div class="form-group">
+            <div class="row">
+                <div class="col-md-4" style="text-align: left;">
+                    Business Start Date 
+                </div>
+                <div class="col-md-8" style="text-align: left;">
+                    <mat-form-field>
+                        <input matInput [matDatepicker]="dp3" placeholder="Input disabled" disabled>
+                        <mat-datepicker-toggle matSuffix [for]="dp3"></mat-datepicker-toggle>
+                        <mat-datepicker #dp3 disabled="false"></mat-datepicker>
+                      </mat-form-field>
+                </div>
+            </div>
+        </div> -->
+      <!-- <mat-form-field>
+            <input matInput [matDatepicker]="myDatepicker">
+            <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
+            <mat-datepicker #myDatepicker></mat-datepicker>
+          </mat-form-field> -->
+      <div class="form-group ">
+        <div class="row">
+          <div class="col-md-4" style="text-align: left;">
+            Business Nature<span style="color:red">*</span>
+          </div>
+          <div class="col-md-8" style="text-align: left;">
+            <input type="radio" value="personal" formControlName="businessNature" [checked]="true"> Company
+            <input type="radio" value="ABC" formControlName="businessNature"> ABC
+            <input type="radio" value="BCD" formControlName="businessNature"> BCD
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-md-4" style="text-align: left;">
+            Business Type <span style="color:red">*</span>
+          </div>
+          <div class="col-md-8">
+            <select class="form-control" formControlName="businessType" (change)="businessTypDrpChngEvnt($event)">
+              <option value="">--Select--</option>
+              <option value="1">Type 1</option>
+              <option value="2">Type 2</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-md-4" style="text-align: left;">
+            Business Sub-Type <span style="color:red">*</span>
+          </div>
+          <div class="col-md-8">
+            <select class="form-control" formControlName="businessSubType" (change)="businessSubTypDrpChngEvnt($event)">
+              <option value="">--Select--</option>
+              <option value="1">Sub Type 1</option>
+              <option value="2">Sub Type 2</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-md-4" style="text-align: left;">
+            Signboard
+          </div>
+          <div class="col-md-8">
+            <div class="col-sm-3" style="padding-top: 7px;">
+              Length
+            </div>
+            <div class="col-sm-3">
+              <input type="text" class="form-control" formControlName="signbrdLnth" placeholder="Length">
+            </div>
+            <div class="col-sm-3" style="padding-top: 7px;">
+              Weidth
+            </div>
+            <div class="col-sm-3">
+              <input type="text" class="form-control" formControlName="signbrdWidth" placeholder="Width">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-md-4" style="text-align: left;">
+            Is it Industry? <span style="color:red">*</span>
+          </div>
+          <div class="col-md-8" style="text-align: left;">
+            <input type="radio" value="Yes" formControlName="isIndustry" [checked]="true"> Yes
+            <input type="radio" value="No" formControlName="isIndustry"> No
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-md-4" style="text-align: left;">
+            Chemicals/Explosive? <span style="color:red">*</span>
+          </div>
+          <div class="col-md-8" style="text-align: left;">
+            <input type="radio" value="Yes" formControlName="isChemOrExplosv" [checked]="true"> Yes
+            <input type="radio" value="No" formControlName="isChemOrExplosv"> No
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-md-4" style="text-align: left;">
+            Plot Type? <span style="color:red">*</span>
+          </div>
+          <div class="col-md-8" style="text-align: left;">
+            <input type="radio" value="Government" formControlName="isGovOrPrivt" [checked]="true"> Government
+            <input type="radio" value="Private" formControlName="isGovOrPrivt"> Private
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-md-4" style="text-align: left;">
+            Plot Sub Type? <span style="color:red">*</span>
+          </div>
+          <div class="col-md-8" style="text-align: left;">
+            <input type="radio" value="Commercial" formControlName="isCommercialOrResidential" [checked]="true">
+            Commercial
+            <input type="radio" value="Residential" formControlName="isCommercialOrResidential"> Residential
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-md-4" style="text-align: left;">
+            Business Place? <span style="color:red">*</span>
+          </div>
+          <div class="col-md-8" style="text-align: left;">
+            <input type="radio" value="Rented" formControlName="isRentedOrOwnership" [checked]="true"> Rented
+            <input type="radio" value="Ownership" formControlName="isRentedOrOwnership"> Ownership
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-md-4" style="text-align: left;">
+            Business Activity? <span style="color:red">*</span>
+          </div>
+          <div class="col-md-8" style="text-align: left;">
+            <input type="radio" value="Wholesaler" formControlName="isWholesalerOrRetailer" [checked]="true">
+            wholesaler
+            <input type="radio" value="Retailer" formControlName="isWholesalerOrRetailer"> Retailer
+            <input type="radio" value="Other" formControlName="isWholesalerOrRetailer"> Other
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center;">
+        <button type="submit" class="btn btn-primary full-width m-b" style="width: 80px!important;">Next</button>
+      </div>
+    </form>
+    <form [formGroup]="NewApplicationDocuments" (ngSubmit)="newapplicationDocs()" *ngIf="activeForm==='docs'">
+      <div class="form-group">
+        <div class="row">
+          <div class="col-md-4" style="text-align: left;">
+            Document Type <span style="color:red">*</span>
+          </div>
+          <div

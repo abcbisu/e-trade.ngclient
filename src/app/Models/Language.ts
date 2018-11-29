@@ -1,6 +1,6 @@
 export class Language {
-    name: string;
-    code: string;
-    id: number;
-    isNatural: boolean
+    Name: string;
+    Code: string;
+    Id: number;
+    IsNatural: boolean;
 }
