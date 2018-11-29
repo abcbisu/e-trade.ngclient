@@ -1,10 +1,10 @@
-import { Language } from './../Models/Language';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/Observable/of';
+import { Language } from "./../Models/Language";
+import { Observable } from "rxjs/Observable";
+import "rxjs/add/Observable/of";
 import "rxjs/add/operator/catch";
 import "rxjs/add/observable/throw";
 import { throwError, observable } from "rxjs";
-import { appConfig } from './../config.app';
+import { appConfig } from "./../config.app";
 import {
     NotSupportedException,
     NullReferenceException,
@@ -12,7 +12,7 @@ import {
     AppException
 } from "./../Exceptions/AppException";
 import { LoginData } from "../Models/LoginData";
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
 @Injectable({
   providedIn: "root"
@@ -20,10 +20,12 @@ import { Injectable } from '@angular/core';
 export class Core {
   private _sessionKey: string;
   private _naturalLangKey: string;
+  private _availableLanguageskey:string;
   private _this: Core;
   constructor() {
     this._sessionKey = appConfig.appSetting._sessionStorageKey;
     this._naturalLangKey = appConfig.appSetting._naturalLanguageKey;
+    this._availableLanguageskey=appConfig.appSetting._availableLanguageskey;
     this._this = this;
   }
 
@@ -104,20 +106,20 @@ export class Core {
   //#endregion
 
   //#region public methods
-  public isAuthenticated(): boolean{
+  public isAuthenticated(): boolean {
     return this._isAuthenticated() as boolean;
   }
   public getNameOfUser(): string {
-    return this._getNameOfUser() as string
+    return this._getNameOfUser() as string;
   }
   public getSessionToken(): string {
     return this._getSessionToken() as string;
   }
   public setLoginData(loginData: LoginData): boolean {
-   return this._setLoginData(loginData);
+    return this._setLoginData(loginData);
   }
   public removeLoginData(): Observable<boolean> {
-    return Observable.create(function (oserver) {
+    return Observable.create(function(oserver) {
       try {
         oserver.next(this._removeLoginData());
       } catch (e) {
@@ -126,20 +128,32 @@ export class Core {
     });
   }
   public getLanguage(): Language {
-        let langData: Language = this._getNaturalLanguage();
-        if (this._isAuthenticated()) {
-          let data = this._getLoginData() as LoginData;
-          if (data && data.language) {
-            langData = data.language;
-          }
-        }
+    let langData: Language = this._getNaturalLanguage();
     return langData;
   }
-  public setNaturalLanguage(language: Language): void {
-        this._setSessionData(this._naturalLangKey, language);
+  public setDefaulLanguage(language: Language): void {
+    this._setSessionData(this._naturalLangKey, language);
+  }
+  public getDefaultLanguage(): Language{
+    return this._getSessionData$<Language>(this._naturalLangKey,t=>
+      {
+        if(t) {
+          return JSON.parse(t);
+        }
+        return null;
+      });
+  } 
+  public getAvailableLanguages(): Language[] {
+    this._validateSessionSupport();
+    return  this._getSessionData$<Language[]>(this._availableLanguageskey,t=>{
+      return JSON.parse(t);
+    });
+  }
+  public setAvailableLanguages(languges: Language[]): void {
+    this._setSessionData(this._availableLanguageskey, languges);
   }
   //#endregion
-  
+
   //#region private field
   private _getNaturalLanguage(): Language {
     this._validateSessionSupport();
@@ -148,7 +162,7 @@ export class Core {
     });
   }
   private _getLoginData(): LoginData {
-    if (typeof sessionStorage == "undefined"){
+    if (typeof sessionStorage == "undefined") {
       throw new NotSupportedException("Web Storage not supported");
     }
 
@@ -166,7 +180,7 @@ export class Core {
     let curDate = new Date();
     if (dta == null) {
       return true;
-    }else {
+    } else {
       if (dta.expiredOn < curDate) {
         return true;
       }
@@ -196,14 +210,16 @@ export class Core {
     return true;
   }
   private _removeLoginData(): boolean {
-    if (typeof sessionStorage == "undefined")
+    if (typeof sessionStorage == "undefined") {
       throw new NotSupportedException("Web Storage not supported");
+    }
     sessionStorage.removeItem(this._sessionKey);
     return true;
   }
   private _validateSessionSupport() {
-    if (typeof sessionStorage == "undefined")
+    if (typeof sessionStorage == "undefined") {
       throw new NotSupportedException("Web Storage not supported");
+    }
   }
   private _setSessionData(key: string, value: any) {
     this._validateSessionSupport();

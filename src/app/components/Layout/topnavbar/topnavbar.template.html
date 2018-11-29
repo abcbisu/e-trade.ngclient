@@ -5,9 +5,8 @@
     </div>
     <ul class="nav navbar-top-links navbar-right">
       <li>
-  <select class="form-control m-b minimalize-styl-2" name="account">
-          <option>English</option>
-          <option>Bengali</option>
+        <select class="form-control m-b minimalize-styl-2" name="account" (change)="onLanguageChange($event)">
+            <option *ngFor="let language of AllAvailableLanguages; let i = index" [selected]="language.Id==SelectedLanguage.Id" [value]="language.Id">{{language.Name}}</option>
         </select>
       </li>
     </ul>

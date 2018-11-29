@@ -1,3 +1,5 @@
+import { AuthInterceptor } from './../../services/AuthInterceptor';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ERadioComponent } from "./../Controls/e-radio/e-radio.component";
 import { ECheckBoxComponent } from "../Controls/e-checkBox/e-checkBox.component";
 import {Er404Component } from "./Errors/Er404.component";
@@ -16,6 +18,7 @@ import {NgxLoadingModule } from "ngx-loading";
 import {WelcomeComponent } from "./welcome/welcome.component";
 import {SignUpComponent } from "./sign-up/sign-up.component";
 import {ForgotPasswordComponent } from "./forgot-password/forgot-password.component";
+import { NewApplicationComponent } from './new-application/new-application.component';
 
 @NgModule({
   declarations: [
@@ -30,14 +33,16 @@ import {ForgotPasswordComponent } from "./forgot-password/forgot-password.compon
     SignUpComponent,
     ForgotPasswordComponent,
     ECheckBoxComponent,
-    ERadioComponent
+    ERadioComponent,
+    NewApplicationComponent,
   ],
   imports: [
     BrowserModule,
     RouterModule,
     BsDropdownModule.forRoot(),
     ReactiveFormsModule,
-    NgxLoadingModule
+    NgxLoadingModule,
+    HttpClientModule
   ],
   exports: [
     FooterComponent,
@@ -47,6 +52,9 @@ import {ForgotPasswordComponent } from "./forgot-password/forgot-password.compon
     TopNavigationNavbarComponent,
     ECheckBoxComponent,
     ERadioComponent
+  ],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ]
 })
 export class LayoutsModule {}

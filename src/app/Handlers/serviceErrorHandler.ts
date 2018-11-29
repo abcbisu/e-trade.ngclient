@@ -1,4 +1,4 @@
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs/Rx";
 import {
   NotFoundException,
   BadRequestException,
@@ -10,25 +10,32 @@ import { Injectable } from "@angular/core";
 @Injectable({
   providedIn: "root"
 })
-export class serviceErrorHandler {
+export class ServiceErrorHandler {
   public handleError(error: Response) {
-    if (error.status === 400)
+    if (error.status === 400){
       return Observable.throw(
-        new BadRequestException(error.statusText, error.json())
+        new BadRequestException(error.statusText, error)
       );
-    else if (error.status === 401)
+    }
+    else if (error.status === 401){
       return Observable.throw(
-        new LoginRequiredException(error.statusText, error.json())
+        new LoginRequiredException(error.statusText, error)
       );
-    else if (error.status === 403)
+    }
+    // tslint:disable-next-line:one-line
+    else if (error.status === 403){
       return Observable.throw(
-        new AccessDeniedException(error.statusText, error.json())
+        new AccessDeniedException(error.statusText, error)
       );
-    else if (error.status === 404)
+    }
+    // tslint:disable-next-line:one-line
+    else if (error.status === 404){
       return Observable.throw(
-        new NotFoundException(error.statusText, error.json())
+        new NotFoundException(error.statusText, error)
       );
-    else
-      return Observable.throw(new AppException(error.statusText, error.json()));
+    }
+    else{
+      return Observable.throw(new AppException(error.statusText, error));
+    }
   }
 }
